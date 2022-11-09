@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import axios from "axios";
 
 function App() {
-  const initialValues = { firstName:"", lastName:"", userName: "", email: "", password: "" , confirmPassword:"" };
+  const initialValues = { userName: "", email: "", password: "" , confirmPassword:"" };
+  const auth = {}
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,14 +32,6 @@ function App() {
     var flag = true;
     const errors = {};
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-    if (!values.firstName) {
-      errors.firstName = "Firstname is required!";
-      flag = false;
-    }
-    if (!values.lastName) {
-      errors.lastName = "Lastname is required!";
-      flag = false;
-    }
     if (!values.userName) {
       errors.userName = "Username is required!";
       flag = false;
@@ -62,7 +57,21 @@ function App() {
       errors.confirmPassword = "Password should be same as previous password";
       flag = false;
     }
+
     if(flag){
+      auth.userName = formValues.userName;
+    }
+
+    if(Object.keys(auth).length > 0){
+      signinUser(auth).then((jwtTokenData)=>{
+        setMessage(jwtTokenData.response);
+        console.log("Message: "+message);
+      })
+    }
+    if(message==="true"){
+      errors.userName = "Username already exists"
+    }
+    if(flag && message==="false"){
       fetch("http://localhost:8080/save",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -71,8 +80,13 @@ function App() {
         console.log("added");
       })
     }
+    
     return errors;
   };
+  const signinUser = (auth) =>{
+    
+    return axios.post("http://localhost:8080/auth",auth).then((response) => response.data)
+  }
   return (
     <div className="container">
       {Object.keys(formErrors).length === 0 && isSubmit ? (
@@ -85,28 +99,6 @@ function App() {
         <h1>Signup Form</h1>
         <div className="ui divider"></div>
         <div className="ui form">
-          <div className="field">
-            <label>Firstname</label>
-            <p>{formErrors.firstName}</p>
-            <input
-              type="text"
-              name="firstName"
-              placeholder="Firstname"
-              value={formValues.firstName}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="field">
-            <label>Lastname</label>
-            <p>{formErrors.lastName}</p>
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Lastname"
-              value={formValues.lastName}
-              onChange={handleChange}
-            />
-          </div>
           <div className="field">
             <label>Username</label>
             <p>{formErrors.userName}</p>

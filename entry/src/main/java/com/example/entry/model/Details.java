@@ -28,8 +28,6 @@ public class Details {
     )
     
     private UUID id;
-    private String firstName;
-    private String lastName;
     private String userName;
     private String email;
     private String password;
@@ -40,18 +38,6 @@ public class Details {
     }
     public void setId(UUID id) {
         this.id = id;
-    }
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
     public String getUserName() {
         return userName;
@@ -80,26 +66,23 @@ public class Details {
     public Details() {
     }
 
-    public Details(
-        @JsonProperty("firstName") String firstName, 
-        @JsonProperty("lastName") String lastName, 
+    public Details( 
         @JsonProperty("userName") String userName, 
         @JsonProperty("email") String email, 
         @JsonProperty("password") String password,
         @JsonProperty("confirmPassword") String confirmPassword) 
     {
         this.id = UUID.randomUUID();
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
     }
-
+    
     @Override
     public String toString() {
-        return "Details [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", userName=" + userName
-                + ", email=" + email + ", password=" + password + ", confirmPassword=" + confirmPassword + "]";
+        return "Details [id=" + id + ", userName=" + userName + ", email=" + email + ", password=" + password
+                + ", confirmPassword=" + confirmPassword + "]";
     }
+
 }
