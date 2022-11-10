@@ -10,6 +10,7 @@ In the project directory, To compile the code, you can run:
 
 ## Run code
 Inorder to run the code
+
       java EntryApplication
       
       Open [http://localhost:8080] to view it in the browser.
